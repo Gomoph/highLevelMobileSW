@@ -1,7 +1,10 @@
+// src/pages/Signup.jsx
+
 import { useState } from 'react';
 import './Login.css';
 import './Signup.css';
 
+// input 칸을 map()을 활용하여 동적으로 생성하기 위한 객체 배열
 const fields = [
   {
     name: 'userId',
@@ -48,12 +51,14 @@ const fields = [
   },
 ];
 
+// 약관 동의 배열
 const terms = [
   { name: 'terms', label: '[필수] 서비스 이용약관' },
   { name: 'privacy', label: '[필수] 개인정보 처리방침' },
   { name: 'marketing', label: '[선택] 마케팅 정보 수신 동의' },
 ];
 
+// 전화번호에서 숫자만 남기고, 입력 길이에 따라 하이픈(-)을 붙이는 함수
 function formatPhoneNumber(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
   const areaLength = digits.startsWith('02') ? 2 : 3;
@@ -66,7 +71,12 @@ function formatPhoneNumber(value) {
 }
 
 export default function Signup({ onBack }) {
+  // 초기값 & 상태 설정
+
+  // 안내 메세지
   const [message, setMessage] = useState('');
+
+  // 회원가입 입력값 상태 (초기값: 공백)
   const [form, setForm] = useState({
     userId: '',
     password: '',
@@ -78,35 +88,49 @@ export default function Signup({ onBack }) {
     addressDetail: '',
   });
 
+  // 약관 동의
   const [agreement, setAgreement] = useState({
     terms: false,
     privacy: false,
     marketing: false,
   });
 
+  // 아이디 중복 확인 value: 확인한 아이디, idle: 확인 전 아이디
   const [duplication, setDuplication] = useState({ value: '', status: 'idle' });
 
+  // 항목 별 에러 메세지
   const [errors, setErrors] = useState({});
 
+  // 모든 약관 동의 확인
   const isAllAgreed = Object.values(agreement).every(Boolean);
 
   function handleInputChange(event) {
-    const { name, value } = event.target;
+    const { name, value } = event.target; // 입력창에 기입한 데이터 가져오기
+
+    // 이전 상태를 받아 새 값을 반환하는 함수
     setForm((previous) => ({
       ...previous,
+      // 이름 항목 변경 & 전화번호라면 (-) 붙히기
       [name]: name === 'phone' ? formatPhoneNumber(value) : value,
     }));
+
+    // 이전 상태를 받아 수정된 항목의 오류 메세지 지우는 함수
     setErrors((previous) => ({
       ...previous,
       [name]: '',
+      // 비밀번호 수정 시 비밀번호 확인의 오류도 삭제
       ...(name === 'password' ? { passwordConfirm: '' } : {}),
     }));
+
+    // 아이디 수정 시 중복확인 상태 초기화 (아이디 바꾸면 중복확인 다시 해야 하는 코드)
     if (name === 'userId') setDuplication({ value: '', status: 'idle' });
-    setMessage('');
+
+    setMessage(''); // 화면에 공통 메세지 삭제
   }
 
   // 아이디 중복 확인
   function handleDuplicateCheck() {
+    // 정규 표현식 (아이디 중복 확인 체크)
     if (!/^[a-zA-Z0-9]{4,20}$/.test(form.userId)) {
       setErrors((previous) => ({
         ...previous,
@@ -120,23 +144,25 @@ export default function Signup({ onBack }) {
 
   // 약관 동의 체크
   function handleAgreementChange(event) {
-    const { name, checked } = event.target;
-    setAgreement((previous) => ({ ...previous, [name]: checked }));
-    setErrors((previous) => ({ ...previous, agreement: '' }));
+    const { name, checked } = event.target; // 변경한 약관 이름과 체크 여부 가져오기
+    setAgreement((previous) => ({ ...previous, [name]: checked })); // 다른 약관은 유지하고 해당 약관의 체크 여부 변경
+    setErrors((previous) => ({ ...previous, agreement: '' })); // 체크 상태 변경 시 약관 오류 메세지 없애기
     setMessage('');
   }
 
   function handleAllAgreementsChange(event) {
-    const { checked } = event.target;
-    setAgreement({ terms: checked, privacy: checked, marketing: checked });
-    setErrors((previous) => ({ ...previous, agreement: '' }));
+    const { checked } = event.target; // 약관에 체크 여부 가져오기
+    setAgreement({ terms: checked, privacy: checked, marketing: checked }); // 모든 약관 체크 상태로 변경
+    setErrors((previous) => ({ ...previous, agreement: '' })); // 오류 메세지 없애기
     setMessage('');
   }
 
   // 아이디 형식, 비밀번호 조건·일치 여부, 이메일, 주소, 약관 동의 검사 코드
   function handleSubmit(event) {
     event.preventDefault();
-    const nextErrors = {};
+
+    const nextErrors = {}; // 항목 별 오류를 담을 빈 객체 생성
+
     if (!/^[a-zA-Z0-9]{4,20}$/.test(form.userId))
       nextErrors.userId = '아이디는 영문, 숫자 4~20자로 입력해 주세요.';
     if (
@@ -159,6 +185,7 @@ export default function Signup({ onBack }) {
     setErrors(nextErrors);
 
     const firstError = Object.keys(nextErrors)[0];
+
     if (firstError) {
       setMessage('입력 내용을 확인해 주세요.');
       event.currentTarget.elements
@@ -203,8 +230,12 @@ export default function Signup({ onBack }) {
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
+
+          {/* 제목 */}
           <h1 id="signup-title">회원가입</h1>
         </header>
+
+        {/* Form 태그 시작 */}
         <form className="signup-form" onSubmit={handleSubmit} noValidate>
           <div className="signup-content">
             {/* map을 활용하여 각 항목의 input 박스 생성 */}
@@ -222,7 +253,7 @@ export default function Signup({ onBack }) {
                     {label} <span aria-hidden="true">*</span>
                   </label>
                   <div className="signup-input-row">
-                    {/* 아이디 입력칸 및 중복 확인 버튼 */}
+                    {/* 항목 별 입력칸 및 중복 확인 버튼 */}
                     <input
                       id={`signup-${name}`}
                       name={name}
@@ -235,7 +266,7 @@ export default function Signup({ onBack }) {
                       aria-invalid={Boolean(errors[name])}
                       aria-describedby={`signup-${name}-help`}
                     />
-                    {/* 이름 부분에만 중복 확인 버튼 생성 */}
+                    {/* 아이디에만 중복 확인 버튼 생성 */}
                     {name === 'userId' && (
                       <button
                         className="signup-small-button"
@@ -245,6 +276,7 @@ export default function Signup({ onBack }) {
                       </button>
                     )}
                   </div>
+
                   <div id={`signup-${name}-help`}>
                     {hint && <p className="signup-hint">{hint}</p>}
                     {errors[name] && (
@@ -261,6 +293,8 @@ export default function Signup({ onBack }) {
                 </div>
               ),
             )}
+
+            {/* 주소 입력 */}
             <div className="signup-field">
               <label htmlFor="signup-address">
                 주소 <span aria-hidden="true">*</span>
@@ -277,6 +311,8 @@ export default function Signup({ onBack }) {
                   aria-invalid={Boolean(errors.address)}
                   aria-describedby="signup-address-help"
                 />
+
+                {/* DB 연결 후 주소 검색 확인*/}
                 <button
                   className="signup-search"
                   type="button"
@@ -286,6 +322,7 @@ export default function Signup({ onBack }) {
                       '주소 검색 기능은 준비 중입니다. 주소를 직접 입력해 주세요.',
                     )
                   }>
+                  {/* 돋보기 아이콘 */}
                   <svg
                     width="16"
                     height="16"
@@ -319,10 +356,14 @@ export default function Signup({ onBack }) {
                 </div>
               )}
             </div>
+
+            {/* 약관 동의 요소 만들기 */}
             <fieldset
               className="signup-agreements"
               aria-describedby="signup-agreement-error">
               <legend>약관 동의</legend>
+
+              {/* 전체 동의 체크박스 */}
               <label className="signup-all">
                 <input
                   type="checkbox"
@@ -331,9 +372,12 @@ export default function Signup({ onBack }) {
                 />
                 전체 동의
               </label>
+
+              {/* map() 이용하여 terms 배열에서 각 객체들의 이름과 내용 가져오기*/}
               {terms.map(({ name, label }) => (
                 <div className="signup-agreement-row" key={name}>
                   <label>
+                    {/* 체크 박스 */}
                     <input
                       type="checkbox"
                       name={name}
@@ -341,8 +385,12 @@ export default function Signup({ onBack }) {
                       onChange={handleAgreementChange}
                       required={name !== 'marketing'}
                     />
+
+                    {/* 내용 */}
                     {label}
                   </label>
+
+                  {/* 더보기 버튼 (추후 추가) */}
                   <button
                     type="button"
                     aria-label={`${label} 내용 보기`}
@@ -353,15 +401,21 @@ export default function Signup({ onBack }) {
                   </button>
                 </div>
               ))}
+
               <p id="signup-agreement-error" className="signup-error">
                 {errors.agreement}
               </p>
             </fieldset>
           </div>
+          {/* content 끝 */}
+
+          {/* message 상태 메세지 출력됨 */}
           <footer className="signup-footer">
             <p className="signup-message" role="status">
               {message}
             </p>
+
+            {/* 회원가입 버튼 */}
             <button className="login-submit signup-submit" type="submit">
               회원가입 완료
             </button>
