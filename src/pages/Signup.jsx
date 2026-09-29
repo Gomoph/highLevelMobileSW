@@ -134,7 +134,7 @@ export default function Signup({ onBack }) {
   }
 
   // 아이디 형식, 비밀번호 조건·일치 여부, 이메일, 주소, 약관 동의 검사 코드
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const nextErrors = {};
     if (!/^[a-zA-Z0-9]{4,20}$/.test(form.userId))
@@ -172,8 +172,22 @@ export default function Signup({ onBack }) {
         ?.focus();
       return;
     }
-    setMessage('회원가입 기능은 준비 중입니다. 아직 가입되지 않았습니다.');
+    try {
+  const response = await fetch('http://localhost:8080/api/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+
+  if (response.ok) {
+    setMessage('회원가입이 완료되었습니다!');
+  } else {
+    setMessage('회원가입에 실패했습니다.');
   }
+  } catch (error) {
+    setMessage('서버와 연결할 수 없습니다.');
+  }
+}
 
   return (
     // UI 하면 구현
