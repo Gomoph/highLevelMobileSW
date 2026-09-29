@@ -173,21 +173,23 @@ export default function Signup({ onBack }) {
       return;
     }
     try {
-  const response = await fetch('http://localhost:8080/api/signup', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  });
+      const response = await fetch('http://localhost:8080/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
 
-  if (response.ok) {
-    setMessage('회원가입이 완료되었습니다!');
-  } else {
-    setMessage('회원가입에 실패했습니다.');
+      if (response.ok) {
+        setMessage('회원가입이 완료되었습니다!');
+      } else {
+        setMessage('회원가입에 실패했습니다.');
+      }
+    } catch (error) {
+      // 콘솔에서 오류 코드 보기
+      console.log(error);
+      setMessage('서버와 연결할 수 없습니다.');
+    }
   }
-  } catch (error) {
-    setMessage('서버와 연결할 수 없습니다.');
-  }
-}
 
   return (
     // UI 하면 구현
