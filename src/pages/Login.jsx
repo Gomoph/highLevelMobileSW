@@ -4,7 +4,7 @@ import { useState } from 'react';
 import LoginField from '../components/login/LoginField.jsx';
 import './Login.css';
 
-export default function Login({ onFindId, onFindPassword }) {
+export default function Login({ onFindId, onFindPassword, onSignup }) {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false); // 로그인 유지 선택 여부이며 실제 세션 저장은 서버 연결 후 처리
   const [message, setMessage] = useState('');
 
@@ -24,10 +24,6 @@ export default function Login({ onFindId, onFindPassword }) {
     setMessage('로그인 기능은 준비 중입니다.'); // 서버 연결 전에는 로그인 성공으로 처리하지 않습니다.
   }
 
-  function showUpcoming(feature) {
-    // 추후 구현할 화면의 버튼을 눌렀을 때 실행합니다.
-    setMessage(`${feature} 기능은 준비 중입니다.`); // 아직 연결되지 않은 기능임을 안내합니다.
-  }
   return (
     <main className="login-page">
       {/* 데스크톱에서는 원본처럼 휴대전화 형태로 표시하는 영역입니다. */}
@@ -116,8 +112,7 @@ export default function Login({ onFindId, onFindPassword }) {
         <footer className="login-footer">
           {/* 계정이 없는 사용자를 위한 안내입니다. */}
           <span>계정이 없으신가요?</span>
-          {/* 회원가입 화면은 추후 연결합니다. */}
-          <button type="button" onClick={() => showUpcoming('계정 생성')}>
+          <button type="button" onClick={onSignup}>
             계정 생성
           </button>
         </footer>{' '}
