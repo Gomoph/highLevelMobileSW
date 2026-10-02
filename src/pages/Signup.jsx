@@ -248,6 +248,7 @@ export default function Signup({ onBack }) {
 
       if (response.ok) {
         setMessage('회원가입이 완료되었습니다!');
+        onBack(); // 회원가입 성공 시 -> 로그인 화면으로 전환
       } else {
         setMessage('회원가입에 실패했습니다.');
       }
