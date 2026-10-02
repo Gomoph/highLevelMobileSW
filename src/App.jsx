@@ -4,10 +4,12 @@ import Login from './pages/Login.jsx';
 import FindId from './pages/FindId.jsx';
 import FindPassword from './pages/FindPassword.jsx';
 import Signup from './pages/Signup.jsx';
-// import Home from './components/home/Home.jsx';
+import Home from './components/home/Home.jsx';
 
 export default function App() {
   const [screen, setScreen] = useState('login');
+  // 로그인 정보는 메모리에 보관하며 새로고침하면 초기화됩니다.
+  const [loginInfo, setLoginInfo] = useState(null);
 
   // 로그인 페이지로 돌아가는 함수
   if (screen === 'findId') {
@@ -22,12 +24,16 @@ export default function App() {
     return <Signup onBack={() => setScreen('login')} />;
   }
 
-  // if (screen === 'home') {
-  //   return <Home />;
-  // }
+  if (screen === 'home' && loginInfo) {
+    return <Home userName={loginInfo.name} />;
+  }
 
   return (
     <Login
+      onLoginSuccess={(info) => {
+        setLoginInfo(info);
+        setScreen('home');
+      }}
       onSignup={() => setScreen('signup')}
       onFindId={() => setScreen('findId')}
       onFindPassword={() => setScreen('findPassword')}

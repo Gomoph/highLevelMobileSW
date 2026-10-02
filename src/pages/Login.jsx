@@ -4,14 +4,18 @@ import { useState } from 'react';
 import LoginField from '../components/login/LoginField.jsx';
 import './Login.css';
 
-export default function Login({ onFindId, onFindPassword, onSignup }) {
+export default function Login({ onFindId, onFindPassword, onSignup, onLoginSuccess }) {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false); // 로그인 유지 선택 여부이며 실제 세션 저장은 서버 연결 후 처리
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault(); // 브라우저가 페이지를 새로 고치는 기본 동작을 막습니다.
+    if (isSubmitting) return;
     const form = event.currentTarget; // 현재 제출한 form 요소를 가져옴
-    const userId = new FormData(form).get('userId').trim(); // 아이디의 앞뒤 공백을 제외하고 확인
+    const formData = new FormData(form);
+    const userId = formData.get('userId').trim();
+    const password = formData.get('password'); // 비밀번호의 공백은 그대로 유지
 
     if (!userId) {
       // 공백만 입력한 아이디도 빈 아이디로 처리합니다.
@@ -20,7 +24,47 @@ export default function Login({ onFindId, onFindPassword, onSignup }) {
       return;
     }
 
-    // setMessage('로그인 기능은 준비 중입니다.'); // 서버 연결 전에는 로그인 성공으로 처리하지 않습니다.
+    if (!password) {
+      setMessage('비밀번호를 입력해 주세요.');
+      form.elements.namedItem('password').focus();
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage('로그인 요청 중입니다.');
+
+    try {
+      // 아이디와 비밀번호를 JSON 요청 본문으로 전송
+      const response = await fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, password }),
+      });
+
+      if (response.status === 401) {
+        setMessage('아이디 또는 비밀번호를 확인해 주세요.');
+      } else if (!response.ok) {
+        setMessage('로그인 요청에 실패했습니다. 다시 시도해 주세요.');
+      } else {
+        // 성공 응답에서 토큰과 사용자 이름을 확인
+        const data = await response.json().catch(() => null);
+        if (
+          !data ||
+          typeof data.token !== 'string' ||
+          !data.token.trim() ||
+          typeof data.name !== 'string'
+        ) {
+          setMessage('로그인 응답 형식을 확인해 주세요.');
+          return;
+        }
+
+        onLoginSuccess({ token: data.token, name: data.name });
+      }
+    } catch {
+      setMessage('서버와 연결할 수 없습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -98,8 +142,8 @@ export default function Login({ onFindId, onFindPassword, onSignup }) {
           </div>{' '}
           {/* 로그인 옵션 영역을 마칩니다. */}
           {/* 제출 버튼은 HTML의 필수 입력 검사 후 handleSubmit을 실행합니다. */}
-          <button className="login-submit" type="submit">
-            로그인
+          <button className="login-submit" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? '요청 중...' : '로그인'}
           </button>
           {/* 안내가 바뀌면 화면 읽기 프로그램에도 자동으로 전달됩니다. */}
           <p className="login-message" role="status">
