@@ -129,9 +129,7 @@ export default function Signup({ onBack }) {
   }
 
   // 아이디 중복 확인
-  async function handleDuplicateCheck() {
-    const userId = form.userId;
-
+  function handleDuplicateCheck() {
     // 정규 표현식 (아이디 중복 확인 체크)
     if (!/^[a-zA-Z0-9]{4,20}$/.test(form.userId)) {
       setErrors((previous) => ({
@@ -140,46 +138,8 @@ export default function Signup({ onBack }) {
       }));
       return;
     }
-
     setErrors((previous) => ({ ...previous, userId: '' }));
-    setDuplication({ value: userId, status: 'checking' });
-
-    // api에 있는 데이터 확인
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/check-userid?userId=${encodeURIComponent(userId)}`,
-      );
-
-      if (!response.ok) throw new Error('중복 확인 요청 실패');
-
-      // 중복확인 여부
-      const isDuplicate = await response.json();
-
-      // 형식 다르면 오류 던지기
-      if (typeof isDuplicate !== 'boolean') {
-        throw new Error('응답 형식 확인');
-      }
-
-      // 중복 확인 결과를 상태에 반영
-      setDuplication((previous) => {
-        // 요청 중 아이디가 변경되어 상태가 초기화됐다면 결과 무시
-        if (previous.value !== userId || previous.status !== 'checking') {
-          return previous;
-        }
-
-        return {
-          value: userId,
-          status: isDuplicate ? 'unavailable' : 'available',
-        };
-      });
-    } catch {
-      // 현재 확인 중인 아이디에 대한 요청 실패만 반영
-      setDuplication((previous) =>
-        previous.value === userId && previous.status === 'checking'
-          ? { value: userId, status: 'error' }
-          : previous,
-      );
-    }
+    setDuplication({ value: form.userId, status: 'unavailable' });
   }
 
   // 약관 동의 체크
@@ -336,17 +296,15 @@ export default function Signup({ onBack }) {
                   <div id={`signup-${name}-help`}>
                     {hint && <p className="signup-hint">{hint}</p>}
                     {errors[name] && (
-                      <p role="status">
-                        {duplication.status === 'checking' &&
-                          '중복 확인 중입니다.'}
-                        {duplication.status === 'available' &&
-                          '사용 가능한 아이디입니다.'}
-                        {duplication.status === 'unavailable' &&
-                          '이미 사용 중인 아이디입니다.'}
-                        {duplication.status === 'error' &&
-                          '중복 확인에 실패했습니다. 다시 시도해 주세요.'}
-                      </p>
+                      <p className="signup-error">{errors[name]}</p>
                     )}
+                    {name === 'userId' &&
+                      duplication.status === 'unavailable' &&
+                      duplication.value === form.userId && (
+                        <p className="signup-hint" role="status">
+                          중복 확인 기능은 준비 중입니다.
+                        </p>
+                      )}
                   </div>
                 </div>
               ),
