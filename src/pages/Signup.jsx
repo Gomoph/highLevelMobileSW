@@ -335,7 +335,16 @@ export default function Signup({ onBack }) {
 
                   <div id={`signup-${name}-help`}>
                     {hint && <p className="signup-hint">{hint}</p>}
+
+                    {/* 입력값 형식 오류 표시 */}
                     {errors[name] && (
+                      <p className="signup-error" role="alert">
+                        {errors[name]}
+                      </p>
+                    )}
+
+                    {/* 아이디 입력칸에 중복 확인 상태 표시 */}
+                    {name === 'userId' && (
                       <p role="status">
                         {duplication.status === 'checking' &&
                           '중복 확인 중입니다.'}
