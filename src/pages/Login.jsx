@@ -4,7 +4,12 @@ import { useState } from 'react';
 import LoginField from '../components/login/LoginField.jsx';
 import './Login.css';
 
-export default function Login({ onFindId, onFindPassword, onSignup, onLoginSuccess }) {
+export default function Login({
+  onFindId,
+  onFindPassword,
+  onSignup,
+  onLoginSuccess,
+}) {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false); // 로그인 유지 선택 여부이며 실제 세션 저장은 서버 연결 후 처리
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -142,7 +147,10 @@ export default function Login({ onFindId, onFindPassword, onSignup, onLoginSucce
           </div>{' '}
           {/* 로그인 옵션 영역을 마칩니다. */}
           {/* 제출 버튼은 HTML의 필수 입력 검사 후 handleSubmit을 실행합니다. */}
-          <button className="login-submit" type="submit" disabled={isSubmitting}>
+          <button
+            className="login-submit"
+            type="submit"
+            disabled={isSubmitting}>
             {isSubmitting ? '요청 중...' : '로그인'}
           </button>
           {/* 안내가 바뀌면 화면 읽기 프로그램에도 자동으로 전달됩니다. */}
