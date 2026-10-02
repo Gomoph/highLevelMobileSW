@@ -1,4 +1,4 @@
-// src/pages/Signup.jsx
+// components/pages/Signup.jsx
 
 import { useState } from 'react';
 import './Login.css';

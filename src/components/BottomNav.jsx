@@ -1,3 +1,5 @@
+// components/BottomNav.jsx
+
 import './BottomNav.css';
 import { useState, useEffect } from 'react';
 

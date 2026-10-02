@@ -1,3 +1,5 @@
+// components/pages/FindPassword.jsx
+
 import { useState } from 'react';
 import './Login.css';
 import './FindId.css';
@@ -10,7 +12,10 @@ export default function FindPassword({ onBack }) {
     const form = event.currentTarget;
     const data = new FormData(form);
 
-    for (const [field, label] of [['userId', '아이디'], ['name', '이름']]) {
+    for (const [field, label] of [
+      ['userId', '아이디'],
+      ['name', '이름'],
+    ]) {
       if (!data.get(field).trim()) {
         setMessage(`${label}를 입력해 주세요.`);
         form.elements.namedItem(field).focus();
@@ -30,14 +35,28 @@ export default function FindPassword({ onBack }) {
 
   return (
     <main className="login-page">
-      <section className="login-phone find-id-phone" aria-labelledby="find-password-title">
+      <section
+        className="login-phone find-id-phone"
+        aria-labelledby="find-password-title">
         <div className="login-status" aria-hidden="true">
           <span>9:41</span>
           <span>▮▮▮ · ▰</span>
         </div>
         <header className="find-id-header">
-          <button className="find-id-back" type="button" onClick={onBack} aria-label="로그인 화면으로 돌아가기">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <button
+            className="find-id-back"
+            type="button"
+            onClick={onBack}
+            aria-label="로그인 화면으로 돌아가기">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
@@ -46,30 +65,76 @@ export default function FindPassword({ onBack }) {
         <div className="find-id-content">
           <div className="find-id-intro">
             <div className="find-id-icon" aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
             </div>
-            <p>가입 시 등록한 정보를 입력하면<br />비밀번호를 재설정할 수 있습니다.</p>
+            <p>
+              가입 시 등록한 정보를 입력하면
+              <br />
+              비밀번호를 재설정할 수 있습니다.
+            </p>
           </div>
           <form onSubmit={handleSubmit} onChange={() => setMessage('')}>
             <div className="find-id-fields">
               <label className="find-id-field">
-                <span>아이디 <span className="find-id-required" aria-hidden="true">*</span></span>
-                <input name="userId" autoComplete="username" placeholder="가입 시 사용한 아이디를 입력하세요" required />
+                <span>
+                  아이디{' '}
+                  <span className="find-id-required" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  name="userId"
+                  autoComplete="username"
+                  placeholder="가입 시 사용한 아이디를 입력하세요"
+                  required
+                />
               </label>
               <label className="find-id-field">
-                <span>이름 <span className="find-id-required" aria-hidden="true">*</span></span>
-                <input name="name" autoComplete="name" placeholder="가입 시 등록한 이름을 입력하세요" required />
+                <span>
+                  이름{' '}
+                  <span className="find-id-required" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  name="name"
+                  autoComplete="name"
+                  placeholder="가입 시 등록한 이름을 입력하세요"
+                  required
+                />
               </label>
               <label className="find-id-field">
-                <span>전화번호 <span className="find-id-required" aria-hidden="true">*</span></span>
-                <input name="phone" type="tel" autoComplete="tel" placeholder="010-0000-0000" required />
+                <span>
+                  전화번호{' '}
+                  <span className="find-id-required" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="010-0000-0000"
+                  required
+                />
               </label>
             </div>
-            <button className="login-submit find-id-submit" type="submit">본인 확인</button>
-            <p className="login-message" role="status">{message}</p>
+            <button className="login-submit find-id-submit" type="submit">
+              본인 확인
+            </button>
+            <p className="login-message" role="status">
+              {message}
+            </p>
           </form>
         </div>
         <div className="login-home-indicator" aria-hidden="true" />

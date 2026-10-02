@@ -1,3 +1,5 @@
+// components/pages/FindId.jsx
+
 import { useState } from 'react';
 import './Login.css';
 import './FindId.css';

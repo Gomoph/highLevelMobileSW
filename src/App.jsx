@@ -4,6 +4,7 @@ import Login from './pages/Login.jsx';
 import FindId from './pages/FindId.jsx';
 import FindPassword from './pages/FindPassword.jsx';
 import Signup from './pages/Signup.jsx';
+import Home from './components/home/Home.jsx';
 
 export default function App() {
   const [screen, setScreen] = useState('login');
@@ -19,6 +20,10 @@ export default function App() {
 
   if (screen === 'signup') {
     return <Signup onBack={() => setScreen('login')} />;
+  }
+
+  if (screen === 'home') {
+    return <Home />;
   }
 
   return (

@@ -1,4 +1,4 @@
-// ./pages/Login.jsx
+// components/pages/Login.jsx
 
 import { useState } from 'react';
 import LoginField from '../components/login/LoginField.jsx';
@@ -9,7 +9,6 @@ export default function Login({ onFindId, onFindPassword, onSignup }) {
   const [message, setMessage] = useState('');
 
   function handleSubmit(event) {
-    // 로그인 버튼이나 Enter 키로 제출할 때 실행합니다.
     event.preventDefault(); // 브라우저가 페이지를 새로 고치는 기본 동작을 막습니다.
     const form = event.currentTarget; // 현재 제출한 form 요소를 가져옴
     const userId = new FormData(form).get('userId').trim(); // 아이디의 앞뒤 공백을 제외하고 확인
@@ -21,7 +20,7 @@ export default function Login({ onFindId, onFindPassword, onSignup }) {
       return;
     }
 
-    setMessage('로그인 기능은 준비 중입니다.'); // 서버 연결 전에는 로그인 성공으로 처리하지 않습니다.
+    // setMessage('로그인 기능은 준비 중입니다.'); // 서버 연결 전에는 로그인 성공으로 처리하지 않습니다.
   }
 
   return (
