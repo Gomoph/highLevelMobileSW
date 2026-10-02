@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Map() {
   const [map, setMap] = useState(null);
@@ -18,11 +18,9 @@ export default function Map() {
         };
         const mapInstance = new window.kakao.maps.Map(container, options);
         setMap(mapInstance);
-        
       });
     }
   }, []);
-  
 
   // 2. 검색 제출 처리 함수
   const handleSearch = (e) => {
@@ -79,10 +77,10 @@ export default function Map() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-    
-
       {/* 🔍 검색창 폼 */}
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+      <form
+        onSubmit={handleSearch}
+        style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
         <input
           type="text"
           value={keyword}
@@ -106,8 +104,7 @@ export default function Map() {
             borderRadius: '8px',
             fontWeight: 'bold',
             cursor: 'pointer',
-          }}
-        >
+          }}>
           검색
         </button>
       </form>
@@ -121,8 +118,7 @@ export default function Map() {
           borderRadius: '12px',
           border: '1px solid #ccc',
           marginBottom: '20px',
-        }}
-      ></div>
+        }}></div>
 
       {/* 📌 선택한 장소 정보 표시 */}
       {selectedPlace && (
@@ -133,19 +129,37 @@ export default function Map() {
             borderRadius: '8px',
             marginBottom: '15px',
             border: '1px solid #b6d4fe',
-          }}
-        >
-          🎯 <strong>선택된 위치:</strong> {selectedPlace.place_name} ({selectedPlace.address_name})
+          }}>
+          🎯 <strong>선택된 위치:</strong> {selectedPlace.place_name} (
+          {selectedPlace.address_name})
         </div>
       )}
 
       {/* 📜 검색 결과 목록 */}
       {places.length > 0 && (
-        <div style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
-          <h4 style={{ margin: 0, padding: '12px', backgroundColor: '#f8f9fa', borderBottom: '1px solid #ddd' }}>
+        <div
+          style={{
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            overflow: 'hidden',
+          }}>
+          <h4
+            style={{
+              margin: 0,
+              padding: '12px',
+              backgroundColor: '#f8f9fa',
+              borderBottom: '1px solid #ddd',
+            }}>
             검색 결과 목록 ({places.length}건)
           </h4>
-          <ul style={{ listStyle: 'none', margin: 0, padding: 0, maxHeight: '250px', overflowY: 'auto' }}>
+          <ul
+            style={{
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
+              maxHeight: '250px',
+              overflowY: 'auto',
+            }}>
             {places.map((place) => (
               <li
                 key={place.id}
@@ -154,17 +168,28 @@ export default function Map() {
                   padding: '12px',
                   borderBottom: '1px solid #eee',
                   cursor: 'pointer',
-                  backgroundColor: selectedPlace?.id === place.id ? '#f0f0f0' : '#fff',
-                }}
-              >
-                <div style={{ fontWeight: 'bold', fontSize: '15px', color: '#333' }}>
+                  backgroundColor:
+                    selectedPlace?.id === place.id ? '#f0f0f0' : '#fff',
+                }}>
+                <div
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#333',
+                  }}>
                   {place.place_name}
                 </div>
-                <div style={{ fontSize: '13px', color: '#666', marginTop: '4px' }}>
+                <div
+                  style={{ fontSize: '13px', color: '#666', marginTop: '4px' }}>
                   {place.road_address_name || place.address_name}
                 </div>
                 {place.phone && (
-                  <div style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#888',
+                      marginTop: '2px',
+                    }}>
                     📞 {place.phone}
                   </div>
                 )}
