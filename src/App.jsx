@@ -22,9 +22,9 @@ export default function App() {
     return <Signup onBack={() => setScreen('login')} />;
   }
 
-  if (screen === 'home') {
-    return <Home />;
-  }
+  // if (screen === 'home') {
+  //   return <Home />;
+  // }
 
   return (
     <Login
