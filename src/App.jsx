@@ -5,6 +5,7 @@ import FindId from './pages/FindId.jsx';
 import FindPassword from './pages/FindPassword.jsx';
 import Signup from './pages/Signup.jsx';
 import Home from './components/home/Home.jsx';
+import Map from './components/Map/Map.jsx';
 
 export default function App() {
   const [screen, setScreen] = useState('login');
